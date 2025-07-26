@@ -24,7 +24,7 @@ This project is a scaffold for a Next.js application that acts as a [WOPI Protoc
 2.  Go to **App registrations** and click **New registration**.
 3.  Give it a name (e.g., "Next.js WOPI Host").
 4.  For **Supported account types**, choose "Accounts in this organizational directory only" or another appropriate option.
-5.  Under **Redirect URI**, select **Single-page application (SPA)** and enter `http://localhost:3000/editor`.
+5.  Under **Redirect URI**, select **Single-page application (SPA)** and enter `http://localhost:3000`.
 6.  Click **Register**.
 7.  Copy the **Application (client) ID** and **Directory (tenant) ID**.
 

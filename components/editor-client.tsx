@@ -44,11 +44,13 @@ export default function EditorClient() {
           const baseUrl = window.location.origin
           const wopiSrcUrl = `${baseUrl}/api/wopi/files/${fileId}`
           setWopiSrc(wopiSrcUrl)
+          // Log diagnostics for WOPISrc and token
+          console.log('[WOPI] Generated WOPISrc:', wopiSrcUrl)
+          console.log('[WOPI] Generated access_token:', token)
         } catch (error) {
           console.error('Error generating WOPI token:', error)
         }
       }
-      
       generateToken()
     }
   }, [accounts])
@@ -86,6 +88,21 @@ export default function EditorClient() {
     }
   }
 
+  // Log iframe URL construction and invocation for diagnostics
+  let iframeUrl: string | null = null;
+  if (wopiSrc && accessToken) {
+    // Defensive: avoid double-encoding
+    const encodedWopiSrc = encodeURIComponent(decodeURIComponent(wopiSrc));
+    iframeUrl = `${WORD_EDIT_URL}?WOPISrc=${encodedWopiSrc}&access_token=${encodeURIComponent(accessToken)}`;
+    console.log('[WOPI] Constructed iframe URL:', iframeUrl);
+  }
+
+  useEffect(() => {
+    if (iframeUrl) {
+      console.log('[WOPI] EditorClient loaded, iframe src:', iframeUrl);
+    }
+  }, [iframeUrl]);
+
   return (
     <>
       <UnauthenticatedTemplate>
@@ -107,10 +124,10 @@ export default function EditorClient() {
           </header>
           <main className="flex-1 flex">
             <div className="flex-1">
-              {wopiSrc && accessToken ? (
+              {iframeUrl ? (
                 <iframe
                   ref={iframeRef}
-                  src={`${WORD_EDIT_URL}?WOPISrc=${encodeURIComponent(wopiSrc)}&access_token=${encodeURIComponent(accessToken)}`}
+                  src={iframeUrl}
                   className="w-full h-full border-0"
                   title="Word Editor"
                 />
