@@ -85,7 +85,7 @@ export async function GET(request: Request, { params }: { params: { fileId: stri
     // Required properties
     BaseFileName: params.fileId,
     OwnerId: "current-user", // Should be a unique user ID
-    Size: fileStat.size.toString(), // Size must be a string
+    Size: fileStat.size, // Size must be an integer
     UserId: "current-user", // Should be a unique user ID
     Version: fileStat.mtime.toISOString(), // File version
     
