@@ -82,28 +82,40 @@ export async function GET(request: Request, { params }: { params: { fileId: stri
 
   // Compose WOPI response
   const fileInfo = {
+    // Required properties
     BaseFileName: params.fileId,
     OwnerId: "current-user", // Should be a unique user ID
-    Size: fileStat.size,
+    Size: fileStat.size.toString(), // Size must be a string
     UserId: "current-user", // Should be a unique user ID
-    Version: fileStat.mtime.toISOString(),
+    Version: fileStat.mtime.toISOString(), // File version
+    
+    // Host capabilities
     SupportsUpdate: true,
     SupportsLocks: true,
-    SupportsComments: true,
     SupportsGetLock: true,
     SupportsExtendedLockLength: true,
+    SupportsCobalt: true, // Modern co-authoring
+    
+    // User permissions
     UserCanWrite: true,
     UserCanNotWriteRelative: true,
-    SupportsCobalt: true,
-    SupportsFolders: true,
-    SupportsScenarioLinks: true,
+
+    // Add-in support
     OfficeAddinHost: true,
-    OfficeAddinSideloadUrl: `${new URL(request.url).origin}/api/manifest`,
+
+    // PostMessage settings for host-addin communication
     PostMessageOrigin: new URL(request.url).origin,
+
+    // Recommended properties for better user experience
+    HostEndpoint: new URL(request.url).origin,
+    FileUrl: `${new URL(request.url).origin}/api/wopi/files/${params.fileId}/contents`,
+    BreadcrumbBrandName: "Odulphi",
+    BreadcrumbBrandUrl: new URL(request.url).origin,
   };
 
-  // Add X-WOPI-ItemVersion header
+  // Add required WOPI response headers
   const res = NextResponse.json(fileInfo);
+  res.headers.set("X-WOPI-MachineName", "next-js-server");
   res.headers.set("X-WOPI-ItemVersion", fileStat.mtime.toISOString());
   logRouteHit("CheckFileInfo", 200);
   return res;
