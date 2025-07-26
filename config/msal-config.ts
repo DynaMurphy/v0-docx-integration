@@ -8,11 +8,11 @@ import { type Configuration, LogLevel } from "@azure/msal-browser"
 export const msalConfig: Configuration = {
   auth: {
     //
-    // TODO: Replace with your app's client ID and authority.
+    // These values are now read from environment variables for production.
     //
-    clientId: "YOUR_CLIENT_ID", // e.g. "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6"
-    authority: "https://login.microsoftonline.com/YOUR_TENANT_ID", // e.g. "https://login.microsoftonline.com/common"
-    redirectUri: "/editor", // Must match the redirect URI in your App Registration
+    clientId: process.env.NEXT_PUBLIC_CLIENT_ID || "YOUR_CLIENT_ID",
+    authority: `https://login.microsoftonline.com/${process.env.NEXT_PUBLIC_TENANT_ID || "YOUR_TENANT_ID"}`,
+    redirectUri: "/editor", // This should be an absolute URL in your Azure App Registration for production
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored

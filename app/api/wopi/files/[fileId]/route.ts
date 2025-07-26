@@ -41,8 +41,8 @@ export async function GET(request: Request, { params }: { params: { fileId: stri
     // Add-in support
     // See: https://learn.microsoft.com/en-us/microsoft-365/cloud-storage-partner-program/online/scenarios/office-add-ins
     OfficeAddinHost: true,
-    // TODO: In production, replace with your actual add-in manifest URL
-    OfficeAddinSideloadUrl: `${new URL(request.url).origin}/manifest.xml`,
+    // Point to the dynamic manifest endpoint
+    OfficeAddinSideloadUrl: `${new URL(request.url).origin}/api/manifest`,
 
     // Enable postMessage communication from host to add-in
     // See: https://learn.microsoft.com/en-us/microsoft-365/cloud-storage-partner-program/online/scenarios/postmessage
